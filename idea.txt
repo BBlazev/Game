@@ -1,0 +1,20 @@
+Phase 1 — Engine
+Collisions, movement, combat, enemies, sound, map, visuals. This is the foundation — making sure everything works mechanically.
+
+Phase 2 — Systems 
+Soul/XP system (enemies drop souls, counter on screen)
+Death and respawn (lose souls, respawn at bonfire)
+Wave spawner (timer, increasing difficulty each wave)
+Health system (player HP bar, enemy HP, damage numbers)
+Inventory and items (weapon upgrades, abilities)
+NPC interaction (walk up, press E, open shop/dialog)
+Save system (bank souls, persist between sessions)
+
+Phase 3 — Content 
+Story and dialogs
+Multiple enemy types with different behaviors
+Boss fights with patterns
+Multiple maps/areas
+Progression and unlocks
+Balancing (how many souls per enemy, item costs, wave difficulty curve)
+Menu screens, pause, game over
