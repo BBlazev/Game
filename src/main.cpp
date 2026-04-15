@@ -138,7 +138,9 @@ int main() {
         map.Update();
         UpdateFrames(player, enemy);
         enemy.UpdateEnemyPosition(player, map);
+        Vector2 ec = enemy.GetCenter();
 
+        Vector2 pc = player.GetCenter();
 
         BeginDrawing();
             ClearBackground(RAYWHITE);
@@ -147,7 +149,10 @@ int main() {
                 map.DrawDebugColliders();
                 player.Draw();
                 enemy.Draw();
-                DrawRectangle(enemy.position.x - 10, enemy.position.y + 25, 20, 16, RAYWHITE);
+
+                DrawRectangle(pc.x - 3, pc.y - 3, 6, 6, RED);
+                DrawRectangle(ec.x - 3, ec.y - 3, 6, 6, GREEN);
+
                 EndMode2D();
         EndDrawing();
     }

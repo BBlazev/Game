@@ -21,7 +21,7 @@ public:
     void UpdateFrame();
     void Draw();
     void SetAnimation(AnimState new_state);
-    Vector2 GetCenter() { return { position.x + 78, position.y + 94 }; }
+    Vector2 GetCenter() { return { position.x + 78, position.y + 64 }; }
 
     AnimState anim_state = AnimState::IDLE;
     Direction direction = Direction::RIGHT;

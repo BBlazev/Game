@@ -2,30 +2,44 @@
 
 void Enemy::InitEnemy()
 {
-    Texture2D tex = LoadTexture("assets/world/Characters/Skeleton 1/no shield/Skeleton 1 - animations-idle.png");
-    animations[AnimState::IDLE] = tex;
+    animations[AnimState::IDLE] = LoadTexture("assets/world/Characters/Skeleton 1/no shield/Skeleton 1 - animations-idle.png");
+    animations[AnimState::WALK] = LoadTexture("assets/world/Characters/Skeleton 1/no shield/Skeleton 1 - animations-walk.png");
+    animations[AnimState::ATTACK] = LoadTexture("assets/world/Characters/Skeleton 1/no shield/Skeleton 1 - animations-atk 1.png");
 
-    tex = LoadTexture("assets/world/Characters/Skeleton 1/no shield/Skeleton 1 - animations-walk.png");
-    animations[AnimState::WALK] = tex;
+    frame_counts[AnimState::IDLE] = 8;
+    frame_counts[AnimState::WALK] = 8;
+    frame_counts[AnimState::ATTACK] = 18;
 
-
-    frame_rec = { 0, 0,
-                  (float)tex.width / total_frames,
-                  (float)tex.height };
+    Texture2D tex = animations[AnimState::IDLE];
+    frame_rec = { 0, 0, (float)tex.width / 8, (float)tex.height };
 }
 
 
 void Enemy::UpdateFrame()
 {
     Texture2D tex = animations[anim_state];
+    int total = frame_counts[anim_state];
+    float fw = (float)tex.width / total;
+
     frame_counter++;
     if (frame_counter >= (60 / frame_speed))
     {
         frame_counter = 0;
         current_frame++;
-        if (current_frame >= total_frames) current_frame = 0;
-        frame_rec.x = (float)current_frame * frame_rec.width;
+        if (current_frame >= total)
+        {
+            current_frame = 0;
+            if (is_atacking)
+            {
+                is_atacking = false;
+                frame_speed = FRAME_SPEED;
+                SetAnimation(AnimState::IDLE);
+            }
+        }
     }
+
+    frame_rec.width = fw;
+    frame_rec.x = (float)current_frame * fw;
 }
 void Enemy::Draw()
 {
@@ -38,7 +52,6 @@ void Enemy::Draw()
     if (direction == Direction::LEFT)
         source.width = -frame_rec.width;
 
-    // position is the center, draw the sprite around it
     Rectangle dest = { position.x, position.y, w, h };
     Vector2 origin = { w / 2.0f, h / 2.0f };
     DrawTexturePro(tex, source, dest, origin, 0.0f, WHITE);
@@ -93,7 +106,10 @@ void Enemy::UpdateEnemyPosition(Player& player, TileMap& map)
     }
     else if (distance <= attack_range)
     {
-        SetAnimation(AnimState::IDLE);
+        SetAnimation(AnimState::ATTACK);
+        frame_speed = ATTACK_FRAME_SPEED;
+        is_atacking = true;
+
     }
     else
     {

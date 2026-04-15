@@ -31,15 +31,18 @@ public:
     Vector2 position = {600, 600};
 
     Rectangle frame_rec = { 0 };
-    int total_frames = 8;
+    
 
+    std::unordered_map<AnimState, int> frame_counts;
     std::unordered_map<AnimState, Texture2D> animations;
     int frame_speed = FRAME_SPEED;
+
+    bool is_atacking{ false };
 
 private:
 
     float detect_range = 200.0f;
-    float attack_range = 10.0f;
+    float attack_range = 30.0f;
     float speed = 1.0f;
 
     int current_frame = 0;
