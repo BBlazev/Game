@@ -23,6 +23,7 @@ void Player::InitPlayer()
 
 }
 
+
 void Player::UpdateFrame()
 {
     auto& frames = animations[anim_state];

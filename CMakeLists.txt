@@ -17,7 +17,7 @@ FetchContent_MakeAvailable(raylib)
 
 file(GLOB_RECURSE SOURCES src/*.cpp src/*.h src/*.hpp)
 
-add_executable(${PROJECT_NAME} ${SOURCES} "src/map.cpp" "src/include/cute_tiled.h")
+add_executable(${PROJECT_NAME} ${SOURCES} "src/map.cpp" "src/include/cute_tiled.h" "src/enemy.cpp")
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

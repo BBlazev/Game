@@ -1,6 +1,7 @@
 #include "raylib.h"
 
 #include "include/player.hpp"
+#include "include/enemy.hpp"
 #include "include/screen.hpp"
 #include "include/map.hpp"
 #include <print>
@@ -8,9 +9,10 @@
 
 
 
-void UpdateFrames(Player& player)
+void UpdateFrames(Player& player, Enemy& enemy)
 {
     player.UpdateFrame();
+    enemy.UpdateFrame();
 }
 
 void HandleMovement(Player& player, TileMap& map)
@@ -112,10 +114,13 @@ int main() {
     SetTargetFPS(120);
 
     TileMap map;
-    map.Load("C:/Users/Bartol/Desktop/c++/RPG/src/assets/world/map.json");
+    map.Load("assets/world/map.json");
 
     Player player;
     player.InitPlayer();
+
+    Enemy enemy;
+    enemy.InitEnemy();
 
     Camera2D camera = { 0 };
     camera.target = { 0, 0 };
@@ -125,13 +130,14 @@ int main() {
     Color shadowColor = { 0, 0, 0, 80 };
 
 
+
     while (!WindowShouldClose()) {
         camera.target = { player.position.x, player.position.y };
         HandleMovement(player, map);
 
         map.Update();
-        UpdateFrames(player);
-
+        UpdateFrames(player, enemy);
+        enemy.UpdateEnemyPosition(player, map);
 
 
         BeginDrawing();
@@ -140,7 +146,9 @@ int main() {
                 map.Draw();
                 map.DrawDebugColliders();
                 player.Draw();
-            EndMode2D();
+                enemy.Draw();
+                DrawRectangle(enemy.position.x - 10, enemy.position.y + 25, 20, 16, RAYWHITE);
+                EndMode2D();
         EndDrawing();
     }
 
