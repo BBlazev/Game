@@ -4,6 +4,7 @@
 #include "include/enemy.hpp"
 #include "include/screen.hpp"
 #include "include/map.hpp"
+#include "include/game.hpp"
 #include <print>
 
 
@@ -114,20 +115,17 @@ int main() {
     SetTargetFPS(120);
 
     TileMap map;
-    map.Load("assets/world/map.json");
-
     Player player;
-    player.InitPlayer();
-
     Enemy enemy;
-    enemy.InitEnemy();
+
+    InitGame(player, enemy, map);
+
 
     Camera2D camera = { 0 };
     camera.target = { 0, 0 };
     camera.offset = { SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f };
     camera.zoom = 2.0f; 
     camera.rotation = 0.0f;
-    Color shadowColor = { 0, 0, 0, 80 };
 
 
 
@@ -141,7 +139,8 @@ int main() {
         Vector2 ec = enemy.GetCenter();
 
         Vector2 pc = player.GetCenter();
-
+        map.camera_x = camera.target.x;
+        map.camera_y = camera.target.y;
         BeginDrawing();
             ClearBackground(RAYWHITE);
             BeginMode2D(camera);
@@ -149,9 +148,6 @@ int main() {
                 map.DrawDebugColliders();
                 player.Draw();
                 enemy.Draw();
-
-                DrawRectangle(pc.x - 3, pc.y - 3, 6, 6, RED);
-                DrawRectangle(ec.x - 3, ec.y - 3, 6, 6, GREEN);
 
                 EndMode2D();
         EndDrawing();

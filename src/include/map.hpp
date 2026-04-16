@@ -26,7 +26,11 @@ public:
 
     bool IsColliding(Rectangle rect);
     std::vector<Rectangle> colliders;
+
+    float camera_x = 0;
+    float camera_y = 0;
 private:
+
 
     std::vector<TilesetInfo> tilesets;
     cute_tiled_map_t* map = nullptr;

@@ -25,7 +25,7 @@ public:
 
     AnimState anim_state = AnimState::IDLE;
     Direction direction = Direction::RIGHT;
-    Vector2 position = { 350.0f, 280.0f };
+    Vector2 position = { 650.0f, 280.0f };
     Vector2 dash_direction = { 0,0 };
     bool is_moving{ false };
     bool is_attacking{ false };

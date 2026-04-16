@@ -106,12 +106,16 @@ void TileMap::Draw()
     cute_tiled_layer_t* layer = map->layers;
     while (layer) {
         if (layer->data_count > 0) {
+
+            float parallax_x = layer->parallaxx; // cute_tiled parses these
+            float parallax_y = layer->parallaxy;
+
             for (int i = 0; i < layer->data_count; i++) {
                 int tile_id = layer->data[i];
                 if (tile_id <= 0) continue;
-
                 TilesetInfo* ts = GetTileset(tile_id);
                 if (!ts) continue;
+                if (ts->columns <= 0) continue;
 
                 int local_id = tile_id - ts->firstgid;
                 int src_x = (local_id % ts->columns) * tile_width;
@@ -120,10 +124,13 @@ void TileMap::Draw()
                 int map_x = (i % map->width) * tile_width;
                 int map_y = (i / map->width) * tile_height;
 
+                // parallax offset relative to camera
+                float offset_x = camera_x * (1.0f - parallax_x);
+                float offset_y = camera_y * (1.0f - parallax_y);
+
                 Rectangle src = { (float)src_x, (float)src_y,
                                   (float)tile_width, (float)tile_height };
-                Vector2 pos = { (float)map_x, (float)map_y };
-
+                Vector2 pos = { (float)map_x - offset_x, (float)map_y - offset_y };
                 DrawTextureRec(ts->texture, src, pos, WHITE);
             }
         }
