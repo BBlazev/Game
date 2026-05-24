@@ -19,11 +19,12 @@ class Enemy
 public:
 
     void InitEnemy();
-    void UpdateFrame();
+    void UpdateFrame(Player& player);
     void Draw();
     void SetAnimation(AnimState new_state);
     void UpdateEnemyPosition(Player& player, TileMap& map);
-    
+    void DealDamage(Player& player, int damage);
+
     Vector2 GetCenter() { return { position.x, position.y + 20 }; }
 
     AnimState anim_state = AnimState::IDLE;

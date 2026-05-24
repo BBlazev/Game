@@ -15,7 +15,7 @@ void Enemy::InitEnemy()
 }
 
 
-void Enemy::UpdateFrame()
+void Enemy::UpdateFrame(Player& player)
 {
     Texture2D tex = animations[anim_state];
     int total = frame_counts[anim_state];
@@ -31,6 +31,7 @@ void Enemy::UpdateFrame()
             current_frame = 0;
             if (is_atacking)
             {
+                DealDamage(player,10);
                 is_atacking = false;
                 frame_speed = FRAME_SPEED;
                 SetAnimation(AnimState::IDLE);
@@ -108,14 +109,19 @@ void Enemy::UpdateEnemyPosition(Player& player, TileMap& map)
     {
         SetAnimation(AnimState::ATTACK);
         frame_speed = ATTACK_FRAME_SPEED;
+        //player.ReduceHealth(10);
         is_atacking = true;
-        player.ReduceHealth(10);
 
     }
     else
     {
         SetAnimation(AnimState::IDLE);
     }
+}
+
+void Enemy::DealDamage(Player& player, int damage)
+{
+    player.ReduceHealth(damage);
 }
 
 

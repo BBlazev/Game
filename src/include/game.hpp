@@ -19,7 +19,7 @@ void InitGame(Player& player, Enemy& enemy, TileMap& map)
 void UpdateFrames(Player& player, Enemy& enemy)
 {
     player.UpdateFrame();
-    enemy.UpdateFrame();
+    enemy.UpdateFrame(player);
 }
 
 void HandleMovement(Player& player, TileMap& map)
