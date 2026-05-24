@@ -51,7 +51,7 @@ int main() {
                 map.DrawDebugColliders();
                 player.Draw();
                 enemy.Draw();
-
+                //DrawText(std::to_string(player.GetHealth()).c_str(), 200, 200, 20, BLACK);
                 EndMode2D();
         EndDrawing();
     }

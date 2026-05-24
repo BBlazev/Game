@@ -109,6 +109,7 @@ void Enemy::UpdateEnemyPosition(Player& player, TileMap& map)
         SetAnimation(AnimState::ATTACK);
         frame_speed = ATTACK_FRAME_SPEED;
         is_atacking = true;
+        player.ReduceHealth(10);
 
     }
     else

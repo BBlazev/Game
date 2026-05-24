@@ -41,6 +41,8 @@ public:
 
 private:
 
+
+
     float detect_range = 200.0f;
     float attack_range = 30.0f;
     float speed = 1.0f;

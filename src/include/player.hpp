@@ -21,6 +21,9 @@ public:
     void UpdateFrame();
     void Draw();
     void SetAnimation(AnimState new_state);
+    int GetHealth();
+    void ReduceHealth(int dmg);
+    void AddHealth(int dmg);
     Vector2 GetCenter() { return { position.x + 78, position.y + 64 }; }
 
     AnimState anim_state = AnimState::IDLE;
@@ -33,8 +36,12 @@ public:
 
     std::unordered_map<AnimState, std::vector<Texture2D>> animations;
     int frame_speed = FRAME_SPEED;
+
+
+
 private:
 
+    int health = 100;
     int current_frame = 0;
     int frame_counter = 0;
 };

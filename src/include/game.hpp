@@ -8,7 +8,7 @@
 
 void InitGame(Player& player, Enemy& enemy, TileMap& map)
 {
-	map.Load("assets/world/map.json");
+	map.Load("assets/world/world.json");
 	player.InitPlayer();
 	enemy.InitEnemy();
 

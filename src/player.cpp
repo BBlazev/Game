@@ -1,5 +1,5 @@
 #include "include/player.hpp"
-
+#include <iostream>
 #include "raylib.h"
 
 
@@ -75,4 +75,20 @@ void Player::SetAnimation(AnimState new_state)
         current_frame = 0;
         frame_counter = 0;
     }
+}
+
+int Player::GetHealth()
+{
+    return this->health;
+}
+
+void Player::ReduceHealth(int dmg)
+{
+    this->health -= dmg;
+    std::cout << GetHealth() << std::endl;
+}
+
+void Player::AddHealth(int hp)
+{
+    this->health += hp;
 }
