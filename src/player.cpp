@@ -79,7 +79,7 @@ void Player::SetAnimation(AnimState new_state)
 
 int Player::GetHealth()
 {
-    return this->health;
+    return health;
 }
 
 void Player::ReduceHealth(int dmg)

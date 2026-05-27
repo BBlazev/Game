@@ -1,6 +1,10 @@
 #pragma once
 
-#define BASE_MOVEMENT_SPEED_PLAYER 2.0f;
+
+constexpr float BASE_MOVEMENT_SPEED_PLAYER = 2.0f;
+constexpr int FRAME_SPEED = 6;
+constexpr int ATTACK_FRAME_SPEED = 6;
+constexpr int DASHING_FRAME_SPEED = 6;
 
 enum class AnimState
 {
@@ -12,7 +16,7 @@ enum class AnimState
     DEATH
 };
 
-enum Direction
+enum class Direction
 {
     LEFT,
     RIGHT,

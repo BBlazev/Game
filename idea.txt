@@ -1,5 +1,6 @@
 Phase 1 — Engine
-Collisions, movement, combat, enemies, sound, map, visuals. This is the foundation — making sure everything works mechanically.
+Collisions, movement, 
+combat, enemies, sound, map, visuals
 
 Phase 2 — Systems 
 Soul/XP system (enemies drop souls, counter on screen)

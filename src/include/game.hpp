@@ -1,124 +1,29 @@
 #pragma once
 
+#include <memory>
+
+
 #include "types.hpp"
 #include "map.hpp"
 #include "enemy.hpp"
 #include "player.hpp"
+#include "camera.hpp"
+#include "screen.hpp"
 
-
-void InitGame(Player& player, Enemy& enemy, TileMap& map)
+class Game
 {
-	map.Load("assets/world/world.json");
-	player.InitPlayer();
-	enemy.InitEnemy();
-
-}
-
-
-
-void UpdateFrames(Player& player, Enemy& enemy)
-{
-    player.UpdateFrame();
-    enemy.UpdateFrame(player);
-}
-
-void HandleMovement(Player& player, TileMap& map)
-{
-    if (player.is_attacking)
-        return;
-
-    Vector2 new_pos = player.position;
-    Rectangle player_rect = { new_pos.x + 64, new_pos.y + 90, 28, 8 };
-
-    if (player.is_dashing)
-    {
-        float dash_speed = 8.0f;
-        Vector2 new_pos = player.position;
-        new_pos.x += player.dash_direction.x * dash_speed;
-        new_pos.y += player.dash_direction.y * dash_speed;
-
-        Rectangle player_rect = { new_pos.x + 64, new_pos.y + 90, 28, 8 };
-        if (!map.IsColliding(player_rect)) {
-            player.position = new_pos;
-        }
-        else {
-            player.is_dashing = false;
-            player.frame_speed = FRAME_SPEED;
-            player.SetAnimation(AnimState::IDLE);
-        }
-        return;
-    }
+public:
+	void InitGame();
+	void UpdateFrames();
+	void HandleMovement();
+	void UnloadAll();
+	void Run();
 
 
+private:
 
-
-    if (IsKeyDown(KEY_D))
-    {
-
-        new_pos.x += BASE_MOVEMENT_SPEED_PLAYER;
-        player.direction = Direction::RIGHT;
-
-    }
-    if (IsKeyDown(KEY_A))
-    {
-        new_pos.x -= BASE_MOVEMENT_SPEED_PLAYER;
-        player.direction = Direction::LEFT;
-
-    }
-    if (IsKeyDown(KEY_S))
-    {
-        new_pos.y += BASE_MOVEMENT_SPEED_PLAYER;
-    }
-    if (IsKeyDown(KEY_W))
-    {
-        new_pos.y -= BASE_MOVEMENT_SPEED_PLAYER;
-    }
-
-
-    if (!map.IsColliding(player_rect)) {
-        player.position = new_pos;
-    }
-    else {
-        Rectangle rect_x = { new_pos.x + 64, player.position.y + 90, 28, 8 };
-        if (!map.IsColliding(rect_x))
-            player.position.x = new_pos.x;
-
-        Rectangle rect_y = { player.position.x + 64, new_pos.y + 90, 28, 8 };
-        if (!map.IsColliding(rect_y))
-            player.position.y = new_pos.y;
-    }
-
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-    {
-        player.SetAnimation(AnimState::ATTACK);
-        player.frame_speed = ATTACK_FRAME_SPEED;
-        player.is_attacking = true;
-    }
-    else if (IsKeyDown(KEY_SPACE))
-    {
-        player.SetAnimation(AnimState::DASH);
-        player.frame_speed = DASHING_FRAME_SPEED;
-        player.is_dashing = true;
-        player.dash_direction = { 0, 0 };
-        if (IsKeyDown(KEY_D)) player.dash_direction.x = 1;
-        if (IsKeyDown(KEY_A)) player.dash_direction.x = -1;
-        if (IsKeyDown(KEY_S)) player.dash_direction.y = 1;
-        if (IsKeyDown(KEY_W)) player.dash_direction.y = -1;
-
-        if (player.dash_direction.x == 0 && player.dash_direction.y == 0)
-            player.dash_direction.x = (player.direction == Direction::RIGHT) ? 1 : -1;
-    }
-    else if (IsKeyDown(KEY_D) || IsKeyDown(KEY_A) || IsKeyDown(KEY_S) || IsKeyDown(KEY_W))
-        player.SetAnimation(AnimState::RUN);
-    else
-        player.SetAnimation(AnimState::IDLE);
-
-}
-
-void UnloadAll(Player& player, TileMap& map)
-{
-    for (auto& anim : player.animations)
-        for (auto& texture : anim.second)
-            UnloadTexture(texture);
-    map.Unload();
-}
+	Player player;
+	Enemy enemy;
+	TileMap map;
+	PlayerCamera camera;
+};

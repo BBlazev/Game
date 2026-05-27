@@ -1,15 +1,14 @@
 #pragma once
 
 #include "raylib.h"
+#include "screen.hpp"
+#include <memory>
 
 class PlayerCamera
 {
 public:
 
-	PlayerCamera(int width, int height);
-
-	int screen_width;
-	int screen_height;
+	PlayerCamera();
 
 	Camera2D& GetCamera();
 

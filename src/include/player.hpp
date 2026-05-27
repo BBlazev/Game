@@ -7,9 +7,7 @@
 #include <unordered_map>
 
 
-#define FRAME_SPEED  6
-#define ATTACK_FRAME_SPEED 6
-#define DASHING_FRAME_SPEED 7
+
 
 
 
@@ -28,7 +26,7 @@ public:
 
     AnimState anim_state = AnimState::IDLE;
     Direction direction = Direction::RIGHT;
-    Vector2 position = { 650.0f, 280.0f };
+    Vector2 position = { 650.0f, 580.0f };
     Vector2 dash_direction = { 0,0 };
     bool is_moving{ false };
     bool is_attacking{ false };

@@ -8,10 +8,6 @@
 #include <unordered_map>
 #include <vector>
 
-#define FRAME_SPEED  6
-#define ATTACK_FRAME_SPEED 6
-#define DASHING_FRAME_SPEED 7
-
 
 
 class Enemy
