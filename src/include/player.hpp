@@ -19,7 +19,8 @@ public:
     void UpdateFrame();
     void Draw();
     void SetAnimation(AnimState new_state);
-    int GetHealth();
+    int GetCurrentHealth() const;
+    int GetMaxHealth() const;
     void ReduceHealth(int dmg);
     void AddHealth(int dmg);
     Vector2 GetCenter() { return { position.x + 78, position.y + 64 }; }
@@ -38,8 +39,10 @@ public:
 
 
 private:
+    int max_health = 100;
+    int min_health = 0;
+    int current_health = max_health;
 
-    int health = 100;
     int current_frame = 0;
     int frame_counter = 0;
 };

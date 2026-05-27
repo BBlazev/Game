@@ -167,16 +167,28 @@ void Game::Run()
         map.camera_y = camera.GetCamera().target.y;
         BeginDrawing();
         ClearBackground(RAYWHITE);
+        //healthbar
+
         BeginMode2D(camera.GetCamera());
             map.Draw();
             map.DrawDebugColliders();
             player.Draw();
             enemy.Draw();
-            EndMode2D();
+        EndMode2D();
+        DrawUI();
+
         EndDrawing();
     }
     UnloadAll();
     CloseWindow();
+
+}
+
+void Game::DrawUI()
+{
+    float ratio = static_cast<float>(player.GetCurrentHealth()) / player.GetMaxHealth();
+    DrawRectangle(200, 200, 100, 20, WHITE);
+    DrawRectangle(200, 200, 100 * ratio, 20, RED);
 
 }
 

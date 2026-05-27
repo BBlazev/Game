@@ -18,7 +18,7 @@ public:
 	void HandleMovement();
 	void UnloadAll();
 	void Run();
-
+	void DrawUI();
 
 private:
 

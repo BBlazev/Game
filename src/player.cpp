@@ -1,5 +1,6 @@
 #include "include/player.hpp"
 #include <iostream>
+#include <algorithm>
 #include "raylib.h"
 
 
@@ -77,18 +78,29 @@ void Player::SetAnimation(AnimState new_state)
     }
 }
 
-int Player::GetHealth()
+
+
+int Player::GetCurrentHealth() const
 {
-    return health;
+    return current_health;
+}
+
+int Player::GetMaxHealth() const 
+{
+    return max_health;
 }
 
 void Player::ReduceHealth(int dmg)
 {
-    this->health -= dmg;
-    std::cout << GetHealth() << std::endl;
+    current_health = std::clamp(current_health - dmg, min_health, max_health);
+    //if(current_health == min_health)
+        //dead
+    std::cout << GetCurrentHealth() << std::endl;
 }
 
 void Player::AddHealth(int hp)
 {
-    this->health += hp;
+    current_health = std::clamp(current_health + hp, min_health, max_health);
+    std::cout << GetCurrentHealth() << std::endl;
+
 }
