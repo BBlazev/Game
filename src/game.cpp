@@ -13,13 +13,13 @@ void Game::InitGame()
 
 
 
-void Game::UpdateFrames()
+void Game::UpdateFrames(float delta)
 {
-    player.UpdateFrame();
-    enemy.UpdateFrame(player);
+    player.UpdateFrame(delta);
+    enemy.UpdateFrame(player, delta);
 }
 
-void Game::HandleMovement()
+void Game::HandleMovement(float delta)
 {
     if (player.is_attacking)
         return;
@@ -29,10 +29,9 @@ void Game::HandleMovement()
 
     if (player.is_dashing)
     {
-        float dash_speed = 8.0f;
         Vector2 new_pos = player.position;
-        new_pos.x += player.dash_direction.x * dash_speed;
-        new_pos.y += player.dash_direction.y * dash_speed;
+        new_pos.x += player.dash_direction.x * DASH_SPEED * delta;
+        new_pos.y += player.dash_direction.y * DASH_SPEED * delta;
 
         Rectangle player_rect = { new_pos.x + 64, new_pos.y + 90, 28, 8 };
         if (!map.IsColliding(player_rect)) {
@@ -52,23 +51,23 @@ void Game::HandleMovement()
     if (IsKeyDown(KEY_D))
     {
 
-        new_pos.x += BASE_MOVEMENT_SPEED_PLAYER;
+        new_pos.x += BASE_MOVEMENT_SPEED_PLAYER * delta;
         player.direction = Direction::RIGHT;
 
     }
     if (IsKeyDown(KEY_A))
     {
-        new_pos.x -= BASE_MOVEMENT_SPEED_PLAYER;
+        new_pos.x -= BASE_MOVEMENT_SPEED_PLAYER * delta;
         player.direction = Direction::LEFT;
 
     }
     if (IsKeyDown(KEY_S))
     {
-        new_pos.y += BASE_MOVEMENT_SPEED_PLAYER;
+        new_pos.y += BASE_MOVEMENT_SPEED_PLAYER * delta;
     }
     if (IsKeyDown(KEY_W))
     {
-        new_pos.y -= BASE_MOVEMENT_SPEED_PLAYER;
+        new_pos.y -= BASE_MOVEMENT_SPEED_PLAYER * delta;
     }
 
 
@@ -149,17 +148,17 @@ void Game::UnloadAll()
 void Game::Run()
 {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "RPG game");
-    SetTargetFPS(120);
+    SetTargetFPS(60);
     InitGame();
 
-
     while (!WindowShouldClose()) {
+        float delta =  GetFrameTime();
         camera.GetCamera().target = { player.position.x, player.position.y };
-        HandleMovement();
+        HandleMovement(delta);
 
         map.Update();
-        UpdateFrames();
-        enemy.UpdateEnemyPosition(player, map);
+        UpdateFrames(delta);
+        enemy.UpdateEnemyPosition(player, map, delta);
         Vector2 ec = enemy.GetCenter();
 
         Vector2 pc = player.GetCenter();
@@ -187,8 +186,8 @@ void Game::Run()
 void Game::DrawUI()
 {
     float ratio = static_cast<float>(player.GetCurrentHealth()) / player.GetMaxHealth();
-    DrawRectangle(200, 200, 100, 20, WHITE);
-    DrawRectangle(200, 200, 100 * ratio, 20, RED);
+    DrawRectangle(100, 100, 100, 20, WHITE);
+    DrawRectangle(100, 100, 100 * ratio, 20, RED);
 
 }
 

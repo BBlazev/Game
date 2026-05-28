@@ -25,14 +25,14 @@ void Player::InitPlayer()
 }
 
 
-void Player::UpdateFrame()
+void Player::UpdateFrame(float delta)
 {
     auto& frames = animations[anim_state];
-
-    frame_counter++;
-    if (frame_counter >= (60 / frame_speed))
+    frame_timer += delta;
+    
+    if (frame_timer >= (1.0f / frame_speed))
     {
-        frame_counter = 0;
+        frame_timer = 0;
         current_frame++;
         if (current_frame >= (int)frames.size()) 
         {
@@ -74,7 +74,7 @@ void Player::SetAnimation(AnimState new_state)
     {
         anim_state = new_state;
         current_frame = 0;
-        frame_counter = 0;
+        frame_timer = 0;
     }
 }
 

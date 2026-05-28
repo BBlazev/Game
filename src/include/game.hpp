@@ -14,8 +14,8 @@ class Game
 {
 public:
 	void InitGame();
-	void UpdateFrames();
-	void HandleMovement();
+	void UpdateFrames(float delta);
+	void HandleMovement(float delta);
 	void UnloadAll();
 	void Run();
 	void DrawUI();

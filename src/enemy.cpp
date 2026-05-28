@@ -15,16 +15,17 @@ void Enemy::InitEnemy()
 }
 
 
-void Enemy::UpdateFrame(Player& player)
+void Enemy::UpdateFrame(Player& player, float delta)
 {
     Texture2D tex = animations[anim_state];
     int total = frame_counts[anim_state];
     float fw = (float)tex.width / total;
 
-    frame_counter++;
-    if (frame_counter >= (60 / frame_speed))
+    frame_timer += delta;
+
+    if (frame_timer >= (1.0f / frame_speed))
     {
-        frame_counter = 0;
+        frame_timer = 0;
         current_frame++;
         if (current_frame >= total)
         {
@@ -64,11 +65,11 @@ void Enemy::SetAnimation(AnimState new_state)
     {
         anim_state = new_state;
         current_frame = 0;
-        frame_counter = 0;
+        frame_timer = 0;
     }
 }
 
-void Enemy::UpdateEnemyPosition(Player& player, TileMap& map)
+void Enemy::UpdateEnemyPosition(Player& player, TileMap& map, float delta)
 {
     Vector2 enemy_center = GetCenter();
     Vector2 player_center = player.GetCenter();
@@ -76,14 +77,14 @@ void Enemy::UpdateEnemyPosition(Player& player, TileMap& map)
     float dy = player_center.y - enemy_center.y;
     float distance = sqrtf(dx * dx + dy * dy);
 
-    if (distance < detect_range && distance > attack_range)
+    if (distance < ENEMY_AA_DETECT_RANGE && distance > ENEMY_AA_RANGE)
     {
         float nx = dx / distance;
         float ny = dy / distance;
 
         Vector2 new_pos = position;
-        new_pos.x += nx * speed;
-        new_pos.y += ny * speed;
+        new_pos.x += nx * BASE_MOVEMENT_SPEED_ENEMY * delta;
+        new_pos.y += ny * BASE_MOVEMENT_SPEED_ENEMY * delta;
 
         Rectangle full_rect = { new_pos.x - 10, new_pos.y + 25, 20, 16 };
 
@@ -105,7 +106,7 @@ void Enemy::UpdateEnemyPosition(Player& player, TileMap& map)
         direction = (dx > 0) ? Direction::RIGHT : Direction::LEFT;
         SetAnimation(AnimState::WALK);
     }
-    else if (distance <= attack_range)
+    else if (distance <= ENEMY_AA_RANGE)
     {
         SetAnimation(AnimState::ATTACK);
         frame_speed = ATTACK_FRAME_SPEED;

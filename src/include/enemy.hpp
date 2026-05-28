@@ -15,10 +15,10 @@ class Enemy
 public:
 
     void InitEnemy();
-    void UpdateFrame(Player& player);
+    void UpdateFrame(Player& player, float delta);
     void Draw();
     void SetAnimation(AnimState new_state);
-    void UpdateEnemyPosition(Player& player, TileMap& map);
+    void UpdateEnemyPosition(Player& player, TileMap& map, float delta);
     void DealDamage(Player& player, int damage);
 
     Vector2 GetCenter() { return { position.x, position.y + 20 }; }
@@ -38,13 +38,8 @@ public:
 
 private:
 
-
-
-    float detect_range = 200.0f;
-    float attack_range = 30.0f;
-    float speed = 1.0f;
-
+    float frame_timer = 0;
     int current_frame = 0;
-    int frame_counter = 0;
+    // frame_counter = 0;
 
 };

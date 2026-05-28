@@ -16,7 +16,7 @@ class Player {
 public:
 
     void InitPlayer();
-    void UpdateFrame();
+    void UpdateFrame(float delta);
     void Draw();
     void SetAnimation(AnimState new_state);
     int GetCurrentHealth() const;
@@ -44,5 +44,5 @@ private:
     int current_health = max_health;
 
     int current_frame = 0;
-    int frame_counter = 0;
+    float frame_timer = 0;
 };
