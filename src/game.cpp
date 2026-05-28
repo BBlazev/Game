@@ -1,5 +1,5 @@
 #include "include/game.hpp"
-
+#include <chrono>
 
 
 void Game::InitGame()
@@ -44,7 +44,6 @@ void Game::HandleMovement(float delta)
         }
         return;
     }
-
 
 
 
@@ -119,41 +118,23 @@ void Game::UnloadAll()
     map.Unload();
 }
 
-/*
-
-    while (!WindowShouldClose()) {
-        camera.GetCamera().target = {player.position.x, player.position.y};
-        HandleMovement(player, map);
-
-        map.Update();
-        UpdateFrames(player, enemy);
-        enemy.UpdateEnemyPosition(player, map);
-        Vector2 ec = enemy.GetCenter();
-
-        Vector2 pc = player.GetCenter();
-        map.camera_x = camera.GetCamera().target.x;
-        map.camera_y = camera.GetCamera().target.y;
-        BeginDrawing();
-            ClearBackground(RAYWHITE);
-            BeginMode2D(camera.GetCamera());
-                map.Draw();
-                map.DrawDebugColliders();
-                player.Draw();
-                enemy.Draw();
-                EndMode2D();
-        EndDrawing();
-    }*/
 
 
 void Game::Run()
 {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "RPG game");
-    SetTargetFPS(60);
+    SetTargetFPS(240);
     InitGame();
 
     while (!WindowShouldClose()) {
         float delta =  GetFrameTime();
         camera.GetCamera().target = { player.position.x, player.position.y };
+        if (IsKeyPressed(KEY_F3))
+        {
+            toggle_debug = !toggle_debug;
+        }
+
+        auto t0 = std::chrono::steady_clock::now();
         HandleMovement(delta);
 
         map.Update();
@@ -164,9 +145,15 @@ void Game::Run()
         Vector2 pc = player.GetCenter();
         map.camera_x = camera.GetCamera().target.x;
         map.camera_y = camera.GetCamera().target.y;
+        
+        auto t1 = std::chrono::steady_clock::now();
+        update_ms = std::chrono::duration<float, std::milli>(t1 - t0).count();
+
+        t0 = std::chrono::steady_clock::now();
+
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        //healthbar
+        
 
         BeginMode2D(camera.GetCamera());
             map.Draw();
@@ -177,6 +164,9 @@ void Game::Run()
         DrawUI();
 
         EndDrawing();
+
+        t1 = std::chrono::steady_clock::now();
+        render_ms = std::chrono::duration<float, std::milli>(t1 - t0).count();
     }
     UnloadAll();
     CloseWindow();
@@ -188,6 +178,18 @@ void Game::DrawUI()
     float ratio = static_cast<float>(player.GetCurrentHealth()) / player.GetMaxHealth();
     DrawRectangle(100, 100, 100, 20, WHITE);
     DrawRectangle(100, 100, 100 * ratio, 20, RED);
+    
+    
+    if (toggle_debug){
+        
+        int fps = GetFPS();
+        
+        DrawText(TextFormat("FPS %d", fps), 1200, 50, 30, WHITE);
+        DrawText(TextFormat("update: %.2f ms", update_ms), 1150, 110, 30, WHITE);
+        DrawText(TextFormat("render: %.2f ms", render_ms), 1150, 160, 30, WHITE);
+
+
+    }
 
 }
 

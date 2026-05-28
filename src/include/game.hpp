@@ -22,6 +22,9 @@ public:
 
 private:
 
+	bool toggle_debug = false;
+	float update_ms = 0.0f;
+	float render_ms = 0.0f;
 	Player player;
 	Enemy enemy;
 	TileMap map;
