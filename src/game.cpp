@@ -1,4 +1,5 @@
 #include "include/game.hpp"
+#include "include/scoped_timer.hpp"
 #include <chrono>
 
 
@@ -125,7 +126,6 @@ void Game::Run()
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "RPG game");
     SetTargetFPS(240);
     InitGame();
-
     while (!WindowShouldClose()) {
         float delta =  GetFrameTime();
         camera.GetCamera().target = { player.position.x, player.position.y };
@@ -134,39 +134,37 @@ void Game::Run()
             toggle_debug = !toggle_debug;
         }
 
-        auto t0 = std::chrono::steady_clock::now();
-        HandleMovement(delta);
+        {
+            ScopedTimer t(update_ms);
 
-        map.Update();
-        UpdateFrames(delta);
-        enemy.UpdateEnemyPosition(player, map, delta);
-        Vector2 ec = enemy.GetCenter();
+            HandleMovement(delta);
 
-        Vector2 pc = player.GetCenter();
-        map.camera_x = camera.GetCamera().target.x;
-        map.camera_y = camera.GetCamera().target.y;
-        
-        auto t1 = std::chrono::steady_clock::now();
-        update_ms = std::chrono::duration<float, std::milli>(t1 - t0).count();
+            map.Update();
+            UpdateFrames(delta);
+            enemy.UpdateEnemyPosition(player, map, delta);
 
-        t0 = std::chrono::steady_clock::now();
-
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
+            map.camera_x = camera.GetCamera().target.x;
+            map.camera_y = camera.GetCamera().target.y;
+        }
         
 
-        BeginMode2D(camera.GetCamera());
+        {
+            ScopedTimer t(render_ms);
+            BeginDrawing();
+            ClearBackground(RAYWHITE);
+
+
+            BeginMode2D(camera.GetCamera());
             map.Draw();
             map.DrawDebugColliders();
             player.Draw();
             enemy.Draw();
-        EndMode2D();
-        DrawUI();
+            EndMode2D();
+            DrawUI();
 
-        EndDrawing();
+            EndDrawing();
+        }
 
-        t1 = std::chrono::steady_clock::now();
-        render_ms = std::chrono::duration<float, std::milli>(t1 - t0).count();
     }
     UnloadAll();
     CloseWindow();
